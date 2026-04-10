@@ -6,10 +6,25 @@
   <title>AppTime</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: sans-serif; background: #f5f5f5;  }
+    body { 
+      font-family: sans-serif; 
+      background: #f5f5f5; 
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Centre horizontalement */
+ 
+    }
+
     h1 { font-size: 18px; margin-bottom: 16px; color: #111; }
     h2 { font-size: 14px; color: #555; margin-bottom: 10px; }
 
+    .container {
+      width: 100%;
+      max-width: 600px; 
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
     #title{
       margin-top:20px;
       display: flex;
@@ -21,15 +36,27 @@
       justify-content: center;
     }
     .section {
+    width: 100%; 
+    margin-top: 20px;
+    display: none; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+    .visible { 
+      display: flex; 
+      flex-direction: column;
+      align-items: center; 
+    }
+
+   .row {  
       background: white;
       border: 1px solid #ddd;
-      padding: 16px;
-      margin-bottom: 16px;
-      display:none;
+      display: flex;
+      padding: 24px;
+      gap: 15px; 
+      margin-bottom: 20px; 
+      justify-content: center; 
+      flex-wrap: wrap; 
     }
-    .visible{ display:block}
-
-    .row { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; flex-wrap: wrap; }
 
     label { font-size: 12px; color: #777; display: block; margin-bottom: 3px; }
 
@@ -41,7 +68,7 @@
       width: 70px;
     }
 
-    input[type="date"] { width: 160px; }
+    input[type="date"] { width: 260px; height: 30px;}
 
     button {
       padding: 10px 16px;
@@ -52,37 +79,48 @@
       font-size: 14px;
       cursor: pointer;
       margin-right: 6px;
+      margin-bottom: 10px;
     }
-    button.danger { background: #D85A30; }
+    button.danger { background: #66a2be; }
 
     .result {
-      margin-top: 10px;
+      margin: 30px;
       padding: 10px 14px;
-      background: #f0faf5;
+      background: #a5cab8;
       border-radius: 8px;
       font-size: 20px;
       font-weight: 500;
-      color: #085041;
+      color: #05201b;
       display: none;
     }
     .result.show { display: block; }
-    .result small { display: block; font-size: 12px; color: #888; font-weight: 400; margin-top: 2px; }
+    .result small { display: block; font-size: 12px; color: #423a3a; font-weight: 400; margin-top: 2px; }
   </style>
 </head>
 <body>
 
   
   <menu class="tabs">
-    <button id="add">Ajouter/soustraire</button>
-    <button id="h">Heure d'écart</button>
-    <button id="j">Jours et semaine d'écart</button>
+    <button alt="fonction ajouter et soustraire" id="add">Ajouter/soustraire</button>
+    <button alt="fonction heure d'écart" id="h">Heure d'écart</button>
+    <button alt="fonction Jours et semaines d'écart" id="j">Jours et semaines d'écart</button>
   </menu>
 
 <h1 id="title">⏱ APP Time</h1>
 
+<div class="container">
+  
+</div>
+
   <!-- 1. Ajouter / Soustraire -->
   <div class="section" id="section_add">
     <h2>1. Ajouter / Soustraire une durée</h2>
+     <div class="result" id="res-add">
+      <span id="res-add-val"></span>
+      <small id="res-add-note"></small>
+    </div>
+
+    
     <div class="row">
       <div>
         <label>Heure départ</label>
@@ -99,19 +137,21 @@
           <input type="number" id="d-m" value="45" min="0" max="59" placeholder="min">
           <input type="number" id="d-s" value="0"  min="0" max="59" placeholder="sec">
         </div>
-      </div>
+      </div> <button alt="ajouter" onclick="doAdd('add')">+ Ajouter</button>
+    <button alt="soustraire" class="danger" onclick="doAdd('sub')">− Soustraire</button>
     </div>
-    <button onclick="doAdd('add')">+ Ajouter</button>
-    <button class="danger" onclick="doAdd('sub')">− Soustraire</button>
-    <div class="result" id="res-add">
-      <span id="res-add-val"></span>
-      <small id="res-add-note"></small>
-    </div>
+   
+   
   </div>
 
   <!-- 2. Durée écoulée -->
   <div class="section" id="section_h">
-    <h2>2. Durée écoulée entre deux heures</h2>
+     <h2>2. Durée écoulée entre deux heures</h2>
+     <div class="result" id="res-elapsed">
+      <span id="res-elapsed-val"></span>
+      <small id="res-elapsed-note"></small>
+    </div>
+   
     <div class="row">
       <div>
         <label>Début</label>
@@ -131,15 +171,17 @@
       </div>
     </div>
     <button onclick="doElapsed()">Calculer</button>
-    <div class="result" id="res-elapsed">
-      <span id="res-elapsed-val"></span>
-      <small id="res-elapsed-note"></small>
-    </div>
+   
   </div>
 
   <!-- 3. Écart entre deux dates -->
   <div class="section" id="section_j">
     <h2>3. Écart entre deux dates</h2>
+      <div class="result" id="res-date">
+      <span id="res-date-val"></span>
+      <small id="res-date-note"></small>
+    </div>
+    
     <div class="row">
       <div>
         <label>Date début</label>
@@ -151,10 +193,7 @@
       </div>
     </div>
     <button onclick="doDateDiff()">Calculer</button>
-    <div class="result" id="res-date">
-      <span id="res-date-val"></span>
-      <small id="res-date-note"></small>
-    </div>
+ 
   </div>
 
   <script>
@@ -226,36 +265,55 @@
       return { result: format(obj), totalMinutes: Math.floor(diff / 60), totalSeconds: diff, nextDay };
     }
 
-    // ============================================================
-    //  3. ÉCART ENTRE DEUX DATES
-    // ============================================================
+  // ============================================================
+//  3. ÉCART ENTRE DEUX DATES (Version avec Mois)
+// ============================================================
 
-    function dateDiff(dateStr1, dateStr2) {
-      const d1 = new Date(dateStr1);
-      const d2 = new Date(dateStr2);
-      if (isNaN(d1.getTime()) || isNaN(d2.getTime())) {
-        return { error: 'Dates invalides.', result: null, negative: false };
-      }
-      const diffMs   = d2 - d1;
-      const negative = diffMs < 0;
-      const totalDays = Math.floor(Math.abs(diffMs) / 86400000);
-      const weeks     = Math.floor(totalDays / 7);
-      const days      = totalDays % 7;
+function dateDiff(dateStr1, dateStr2) {
+  let d1 = new Date(dateStr1);
+  let d2 = new Date(dateStr2);
 
-      const parts = [];
-      if (weeks > 0) parts.push(`${weeks} semaine${weeks > 1 ? 's' : ''}`);
-      if (days > 0)  parts.push(`${days} jour${days > 1 ? 's' : ''}`);
-      if (parts.length === 0) parts.push('0 jour');
+  if (isNaN(d1.getTime()) || isNaN(d2.getTime())) {
+    return { error: 'Dates invalides.', result: null, negative: false };
+  }
 
-      return {
-        result: (negative ? '−' : '') + parts.join(' '),
-        totalDays,
-        weeks,
-        days,
-        negative,
-        error: null,
-      };
-    }
+  const negative = d2 < d1;
+  // Si c'est négatif, on inverse pour faire le calcul
+  if (negative) { [d1, d2] = [d2, d1]; }
+
+  let months = (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth());
+  let tempD1 = new Date(d1);
+  tempD1.setMonth(tempD1.getMonth() + months);
+
+  // Ajustement si le jour du mois de d2 est inférieur à d1
+  if (tempD1 > d2) {
+    months--;
+    tempD1 = new Date(d1);
+    tempD1.setMonth(tempD1.getMonth() + months);
+  }
+
+  const diffMs = d2 - tempD1;
+  const totalDaysRemaining = Math.floor(diffMs / 86400000);
+  const weeks = Math.floor(totalDaysRemaining / 7);
+  const days = totalDaysRemaining % 7;
+
+  // Calcul du total de jours absolu (pour la note)
+  const absoluteTotalDays = Math.floor(Math.abs(new Date(dateStr2) - new Date(dateStr1)) / 86400000);
+
+  const parts = [];
+  if (months > 0) parts.push(`${months} mois`);
+  if (weeks > 0) parts.push(`${weeks} semaine${weeks > 1 ? 's' : ''}`);
+  if (days > 0) parts.push(`${days} jour${days > 1 ? 's' : ''}`);
+  
+  if (parts.length === 0) parts.push('0 jour');
+
+  return {
+    result: (negative ? '−' : '') + parts.join(' '),
+    totalDays: absoluteTotalDays,
+    negative,
+    error: null,
+  };
+}
 
     // ============================================================
     //  UI
