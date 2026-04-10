@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AppTime</title>
+  <title>About Time !</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { 
@@ -16,7 +16,7 @@
     }
 
     h1 { font-size: 18px; margin-bottom: 16px; color: #111; }
-    h2 { font-size: 14px; color: #555; margin-bottom: 10px; }
+    h2 { font-size: 18px; color: #555; margin-bottom: 10px; }
 
     .container {
       width: 100%;
@@ -29,6 +29,9 @@
       margin-top:20px;
       display: flex;
       justify-content: center;
+    }
+    #title svg {
+      margin-left: 10px;
     }
     .tabs{
       margin-top: -5px;
@@ -70,6 +73,14 @@
 
     input[type="date"] { width: 260px; height: 30px;}
 
+    .accueil{
+      justify-self: center;
+    }
+    .calculatrice{
+      height: 200px;
+      display: flex;
+      justify-self: center;
+    }
     button {
       padding: 10px 16px;
       background: #bc95c7;
@@ -82,6 +93,10 @@
       margin-bottom: 10px;
     }
     button.danger { background: #66a2be; }
+
+    .description{
+      margin-top: 30px;
+    }
 
     .result {
       margin: 30px;
@@ -106,8 +121,16 @@
     <button alt="fonction Jours et semaines d'écart" id="j">Jours et semaines d'écart</button>
   </menu>
 
-<h1 id="title">⏱ APP Time</h1>
+<h1 id="title">  About Damn Time  
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock-alert-icon lucide-clock-alert"><path d="M12 6v6l4 2"/><path d="M20 12v5"/><path d="M20 21h.01"/><path d="M21.25 8.2A10 10 0 1 0 16 21.16"/></svg>
+   
+  </h1> 
+<section class="accueil"  id="accueil">
+  
+  <img  class="calculatrice" alt="girl Math" src="girlmath.png"/>
 
+  <p class="description"> Okay, Oh right it's About Damn Time ! <br>Choisis une fonction ci-dessus  ⏱ . </p>
+</section>
 <div class="container">
   
 </div>
@@ -357,20 +380,20 @@ function dateDiff(dateStr1, dateStr2) {
       const j = document.getElementById("j")
 
       const allSection = document.querySelectorAll(".section");
-      function showSection(id){
-        allSection.forEach(sec=> sec.classList.remove("visible"));
+    function showSection(id) {
+      // Cache l'accueil dès qu'on clique sur un onglet
+      document.getElementById('accueil').style.display = 'none';
 
-      const target = document.getElementById(id)
+      allSection.forEach(sec => sec.classList.remove("visible"));
+      const target = document.getElementById(id);
       target.classList.add("visible");
-      }
+    }
 
       add.addEventListener("click", () => showSection("section_add"));
       h.addEventListener("click", () => showSection("section_h"));
       j.addEventListener("click", () => showSection("section_j"));
-   
-  </script>
-  
-<script>
+     
+
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./sw.js')
