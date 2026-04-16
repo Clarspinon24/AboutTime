@@ -1,26 +1,43 @@
+function toSeconds(h, m, s) {
+    return h * 3600 + m * 60 + s;
+}
 
+function fromSeconds(s) {
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    return { h, m, s: sec };
+}
+
+function pad(n) {
+    return n.toString().padStart(2, '0');
+}
+
+function format(obj) {
+    return `${pad(obj.h)}h ${pad(obj.m)}min`;
+}
     // ============================================================
     //  1. AJOUTER / SOUSTRAIRE
     // ============================================================
 
     function addSubtractTime(startH, startM, startS, durH, durM, durS, op) {
-      const startSec = toSeconds(startH, startM, startS);
-      const durSec   = toSeconds(durH, durM, durS);
-      const totalSec = op === 'add' ? startSec + durSec : startSec - durSec;
+    const startSec = toSeconds(startH, startM, startS);
+    const durSec   = toSeconds(durH, durM, durS);
+    const totalSec = op === 'add' ? startSec + durSec : startSec - durSec;
 
-      const overflow = Math.floor(totalSec / 86400);
-      let inDay = totalSec % 86400;
-      if (inDay < 0) inDay += 86400;
+    const overflow = Math.floor(totalSec / 86400);
+    let inDay = totalSec % 86400;
+    if (inDay < 0) inDay += 86400;
 
-      const h = Math.floor(inDay / 3600);
-      const m = Math.floor((inDay % 3600) / 60);
-      const s = inDay % 60;
+    const h = Math.floor(inDay / 3600);
+    const m = Math.floor((inDay % 3600) / 60);
+    const s = inDay % 60;
 
-      let overflowLabel = '';
-      if (overflow > 0) overflowLabel = `+${overflow} jour${overflow > 1 ? 's' : ''}`;
-      if (overflow < 0) overflowLabel = `${overflow} jour${Math.abs(overflow) > 1 ? 's' : ''}`;
+    let overflowLabel = '';
+    if (overflow > 0) overflowLabel = `+${overflow} jour${overflow > 1 ? 's' : ''}`;
+    if (overflow < 0) overflowLabel = `${overflow} jour${Math.abs(overflow) > 1 ? 's' : ''}`;
 
-      return { result: `${pad(h)}h ${pad(m)}min ${pad(s)}s`, overflow, overflowLabel };
+    return { result: `${pad(h)}h ${pad(m)}min ${pad(s)}s`, overflow, overflowLabel };
     }
 
     // ============================================================
@@ -28,11 +45,11 @@
     // ============================================================
 
     function elapsedTime(h1, m1, s1, h2, m2, s2) {
-      let diff = toSeconds(h2, m2, s2) - toSeconds(h1, m1, s1);
-      const nextDay = diff < 0;
-      if (nextDay) diff += 86400;
-      const obj = fromSeconds(diff);
-      return { result: format(obj), totalMinutes: Math.floor(diff / 60), totalSeconds: diff, nextDay };
+    let diff = toSeconds(h2, m2, s2) - toSeconds(h1, m1, s1);
+    const nextDay = diff < 0;
+    if (nextDay) diff += 86400;
+    const obj = fromSeconds(diff);
+    return { result: format(obj), totalMinutes: Math.floor(diff / 60), totalSeconds: diff, nextDay };
     }
 
     // ============================================================
@@ -40,52 +57,52 @@
     // ============================================================
 
 function dateDiff(dateStr1, dateStr2) {
-  let d1 = new Date(dateStr1);
-  let d2 = new Date(dateStr2);
+let d1 = new Date(dateStr1);
+let d2 = new Date(dateStr2);
 
-  if (isNaN(d1.getTime()) || isNaN(d2.getTime())) {
+if (isNaN(d1.getTime()) || isNaN(d2.getTime())) {
     return { error: 'Dates invalides.', result: null, negative: false };
-  }
+}
 
-  const negative = d2 < d1;
-  // Si c'est négatif, on inverse pour faire le calcul
-  if (negative) { [d1, d2] = [d2, d1]; }
+const negative = d2 < d1;
+// Si c'est négatif, on inverse pour faire le calcul
+if (negative) { [d1, d2] = [d2, d1]; }
 
-  let months = (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth());
-  let tempD1 = new Date(d1);
-  tempD1.setMonth(tempD1.getMonth() + months);
+let months = (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth());
+let tempD1 = new Date(d1);
+tempD1.setMonth(tempD1.getMonth() + months);
 
-  // Ajustement si le jour du mois de d2 est inférieur à d1
-  if (tempD1 > d2) {
+// Ajustement si le jour du mois de d2 est inférieur à d1
+if (tempD1 > d2) {
     months--;
     tempD1 = new Date(d1);
     tempD1.setMonth(tempD1.getMonth() + months);
-  }
+}
 
-  const diffMs = d2 - tempD1;
-  const totalDaysRemaining = Math.floor(diffMs / 86400000);
-  const weeks = Math.floor(totalDaysRemaining / 7);
-  const days = totalDaysRemaining % 7;
+const diffMs = d2 - tempD1;
+const totalDaysRemaining = Math.floor(diffMs / 86400000);
+const weeks = Math.floor(totalDaysRemaining / 7);
+const days = totalDaysRemaining % 7;
 
-  // Calcul du total de jours absolu (pour la note)
-  const absoluteTotalDays = Math.floor(Math.abs(new Date(dateStr2) - new Date(dateStr1)) / 86400000);
+// Calcul du total de jours absolu (pour la note)
+const absoluteTotalDays = Math.floor(Math.abs(new Date(dateStr2) - new Date(dateStr1)) / 86400000);
 
-  const parts = [];
-  if (months > 0) parts.push(`${months} mois`);
-  if (weeks > 0) parts.push(`${weeks} semaine${weeks > 1 ? 's' : ''}`);
-  if (days > 0) parts.push(`${days} jour${days > 1 ? 's' : ''}`);
-  
-  if (parts.length === 0) parts.push('0 jour');
+const parts = [];
+if (months > 0) parts.push(`${months} mois`);
+if (weeks > 0) parts.push(`${weeks} semaine${weeks > 1 ? 's' : ''}`);
+if (days > 0) parts.push(`${days} jour${days > 1 ? 's' : ''}`);
 
-  return {
+if (parts.length === 0) parts.push('0 jour');
+
+return {
     result: (negative ? '−' : '') + parts.join(' '),
     totalDays: absoluteTotalDays,
     negative,
     error: null,
-  };
+};
 }
 
-  // ============================================================
+// ============================================================
 //  4. GESTION DE LA CARTE RESTAURANT
 // ============================================================
 
@@ -110,10 +127,10 @@ function saveSolde() {
     rafraichirAffichageResto();
     
     alert("Solde mis à jour !");
-}
-// ============================================================
+}// ============================================================
 //  5. GESTION DU POINTAGE (35h)
 // ============================================================
+
 function doBadge(type) {
     const maintenant = new Date();
     const dateCle = maintenant.toLocaleDateString();
@@ -133,8 +150,10 @@ function doBadge(type) {
 
     localStorage.setItem('pointage_travail', JSON.stringify(historique));
     
-    // On met à jour l'interface (ce qui va griser les boutons)
+    // MISE À JOUR DE TOUT L'AFFICHAGE
     refreshPointageUI(dateCle, historique[dateCle]);
+    calculerTotalSemaine(); // <--- Ajouté
+    afficherHistorique();   // <--- Ajouté
 }
 
 function refreshPointageUI(date, infos) {
@@ -142,7 +161,6 @@ function refreshPointageUI(date, infos) {
     const btnSoir = document.getElementById('btn-soir');
     const status = document.getElementById('status-badge');
 
-    // Sécurité : On grise les boutons selon l'état
     if (infos.arrivee) {
         btnMatin.disabled = true;
         btnMatin.style.opacity = "0.5";
@@ -162,21 +180,94 @@ function refreshPointageUI(date, infos) {
     }
 }
 
-// LA FONCTION DE SECOURS (DEBUG/MODIF)
+// --- NOUVELLES FONCTIONS DE CALCUL ET HISTORIQUE ---
+
+function calculerTotalSemaine() {
+    let historique = JSON.parse(localStorage.getItem('pointage_travail') || '{}');
+    let totalMinutesSemaine = 0;
+    
+    const maintenant = new Date();
+    const jourSemaine = maintenant.getDay() || 7; 
+    const lundi = new Date(maintenant);
+    lundi.setDate(maintenant.getDate() - jourSemaine + 1);
+    lundi.setHours(0,0,0,0);
+
+    for (let dateStr in historique) {
+        // On transforme "16/04/2026" en objet Date pour comparer
+        let parts = dateStr.split('/');
+        let datePointage = new Date(parts[2], parts[1] - 1, parts[0]);
+
+        if (datePointage >= lundi && historique[dateStr].arrivee && historique[dateStr].depart) {
+            const [h1, min1] = historique[dateStr].arrivee.split(':').map(Number);
+            const [h2, min2] = historique[dateStr].depart.split(':').map(Number);
+            
+            // On utilise ta fonction elapsedTime du début du script
+            const diff = elapsedTime(h1, min1, 0, h2, min2, 0);
+            totalMinutesSemaine += diff.totalMinutes;
+        }
+    }
+
+    const h = Math.floor(totalMinutesSemaine / 60);
+    const m = totalMinutesSemaine % 60;
+    const texte = `${h}h ${m}min / 35h`;
+    
+    if(document.getElementById('total-semaine')) document.getElementById('total-semaine').innerText = "Total semaine : " + texte;
+    if(document.getElementById('total-accueil')) document.getElementById('total-accueil').innerText = "Cette semaine : " + texte;
+}
+
+function afficherHistorique() {
+    let historique = JSON.parse(localStorage.getItem('pointage_travail') || '{}');
+    let html = "";
+    
+    // Tri décroissant (plus récent en haut)
+    let datesTriees = Object.keys(historique).sort((a, b) => {
+        const d1 = a.split('/').reverse().join('');
+        const d2 = b.split('/').reverse().join('');
+        return d2.localeCompare(d1);
+    });
+
+    datesTriees.forEach(date => {
+        let jour = historique[date];
+        let dureeText = "";
+        
+        if(jour.arrivee && jour.depart) {
+            const [h1, min1] = jour.arrivee.split(':').map(Number);
+            const [h2, min2] = jour.depart.split(':').map(Number);
+            dureeText = ` (${elapsedTime(h1, min1, 0, h2, min2, 0).result})`;
+        }
+
+        html += `<div style="border-bottom: 1px solid #eee; padding: 8px 0; display:flex; justify-content: space-between;">
+                    <span><strong>${date}</strong></span>
+                    <span>${jour.arrivee || '--'} ➔ ${jour.depart || '--'} <small>${dureeText}</small></span>
+                 </div>`;
+    });
+
+    const listContainer = document.getElementById('logs-aujourdhui');
+    if(listContainer) listContainer.innerHTML = html || "Aucun historique.";
+}
+
 function resetPointage() {
     const dateCle = new Date().toLocaleDateString();
-    if (confirm("Voulez-vous effacer les pointages d'aujourd'hui pour recommencer ?")) {
+    if (confirm("Voulez-vous effacer les pointages d'aujourd'hui ?")) {
         let historique = JSON.parse(localStorage.getItem('pointage_travail') || '{}');
-        delete historique[dateCle]; // On supprime juste la journée actuelle
+        delete historique[dateCle];
         localStorage.setItem('pointage_travail', JSON.stringify(historique));
         
-        // On remet l'interface à zéro
-        document.getElementById('status-badge').innerText = "Prêt pour le badgeage";
-        document.getElementById('btn-matin').disabled = false;
-        document.getElementById('btn-matin').style.opacity = "1";
-        document.getElementById('btn-soir').disabled = false;
-        document.getElementById('btn-soir').style.opacity = "1";
-        
-        alert("Pointages effacés pour aujourd'hui.");
+        // On rafraîchit tout
+        location.reload(); // Plus simple pour tout remettre à zéro proprement
     }
 }
+
+// Au chargement de la page, on initialise tout
+window.addEventListener('load', () => {
+    const dateCle = new Date().toLocaleDateString();
+    const historique = JSON.parse(localStorage.getItem('pointage_travail') || '{}');
+    
+    if (historique[dateCle]) {
+        refreshPointageUI(dateCle, historique[dateCle]);
+    }
+    
+    calculerTotalSemaine();
+    afficherHistorique();
+    rafraichirAffichageResto();
+});
