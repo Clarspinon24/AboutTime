@@ -154,6 +154,7 @@ function doBadge(type) {
     refreshPointageUI(dateCle, historique[dateCle]);
     calculerTotalSemaine(); // <--- Ajouté
     afficherHistorique();   // <--- Ajouté
+    mettreAJourTableHistorique(); // Mise à jour de la table hebdo
 }
 
 function refreshPointageUI(date, infos) {
@@ -164,7 +165,18 @@ function refreshPointageUI(date, infos) {
     if (infos.arrivee) {
         btnMatin.disabled = true;
         btnMatin.style.opacity = "0.5";
-        status.innerText = `Arrivé le matin à : ${infos.arrivee}`;
+        
+        // Calculer l'heure de départ (7h 45 + heure d'arrivée)
+        const [h, m] = infos.arrivee.split(':').map(Number);
+        const arriveeEnMinutes = h * 60 + m;
+        let departEnMinutes = arriveeEnMinutes + (7 * 60 + 45); // 7h 45 de travail
+        
+        // Gérer le dépassement de 24h
+        const departH = Math.floor(departEnMinutes / 60) % 24;
+        const departM = departEnMinutes % 60;
+        const heureDepart = `${String(departH).padStart(2, '0')}:${String(departM).padStart(2, '0')}`;
+        
+        status.innerText = `Vous êtes arrivé à  ${infos.arrivee}\n vous devez donc partir à ${heureDepart}`;
     } else {
         btnMatin.disabled = false;
         btnMatin.style.opacity = "1";
@@ -270,4 +282,5 @@ window.addEventListener('load', () => {
     calculerTotalSemaine();
     afficherHistorique();
     rafraichirAffichageResto();
+    mettreAJourTableHistorique(); // Mise à jour de la table au chargement
 });

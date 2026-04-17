@@ -10,7 +10,7 @@
 
     h1 { font-size: 18px; margin-bottom: 16px; color: #111; }
     h2 { font-size: 18px; color: #555; margin-bottom: 10px; }
-
+    h3 { font-size: 18px; margin-bottom: 10px; text-align: center; }
     .container {
       width: 100%;
       max-width: 600px; 
@@ -35,7 +35,6 @@
     width: 100%; 
     margin-top: 20px;
     display: none; 
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     }
     .visible { 
       display: flex; 
@@ -103,3 +102,53 @@
     }
     .result.show { display: block; }
     .result small { display: block; font-size: 12px; color: #423a3a; font-weight: 400; margin-top: 2px; }
+
+    .historique-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .historique-table thead {
+      background: #f0f0f0;
+      font-weight: bold;
+    }
+
+    .historique-table th,
+    .historique-table td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .historique-table th {
+      font-weight: 600;
+      color: #555;
+    }
+
+    .historique-table td:first-child,
+    .historique-table th:first-child {
+      text-align: left;
+    }
+
+    .duree-calculee {
+      font-weight: 500;
+      color: #666;
+    }
+    .block {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    .card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      width: 100%;
+      max-width: 500px;
+      margin: 10px;
+    }

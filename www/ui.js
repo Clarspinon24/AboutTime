@@ -34,10 +34,7 @@
         : `soit ${r.totalDays} jour${r.totalDays > 1 ? 's' : ''} au total`;
       showResult('res-date', r.result, note);
     }
-    
-      const add = document.getElementById("add")
-      const h = document.getElementById("h")
-      const j = document.getElementById("j")
+      const calcul = document.getElementById("btn_calcul")
       const travail = document.getElementById("btn_travail")
 
       const allSection = document.querySelectorAll(".section");
@@ -50,11 +47,68 @@
       target.classList.add("visible");
     }
 
-      add.addEventListener("click", () => showSection("section_add"));
-      h.addEventListener("click", () => showSection("section_h"));
-      j.addEventListener("click", () => showSection("section_j"));
+      calcul.addEventListener("click", () => showSection("section_calcul"));
       travail.addEventListener("click", () => showSection("section_travail"));
      
+    // ============================================================
+    // Historique Semaine - Mise à jour de la table avec le pointage
+    // ============================================================
+    
+    function obtenirJourSemaine(dateStr) {
+      // dateStr format: "17/04/2026" ou même format
+      const jours = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+      const parts = dateStr.split('/');
+      const date = new Date(parts[2], parts[1] - 1, parts[0]); // Y, M, D
+      return jours[date.getDay()];
+    }
+
+    function mettreAJourTableHistorique() {
+      const historique = JSON.parse(localStorage.getItem('pointage_travail') || '{}');
+      
+      Object.entries(historique).forEach(([dateStr, infos]) => {
+        const jour = obtenirJourSemaine(dateStr);
+        
+        // Vérifier que le jour existe dans la table
+        const row = document.querySelector(`tr[data-jour="${jour}"]`);
+        if (!row) return;
+        
+        const spanArrivee = row.querySelector('span.heure-arrivee');
+        const spanDepart = row.querySelector('span.heure-depart');
+        const spanDuree = row.querySelector('span.duree-calculee');
+        
+        if (infos.arrivee) {
+          spanArrivee.textContent = infos.arrivee;
+        }
+        if (infos.depart) {
+          spanDepart.textContent = infos.depart;
+        }
+        
+        // Calculer la durée
+        if (infos.arrivee && infos.depart) {
+          const [aH, aM] = infos.arrivee.split(':').map(Number);
+          const [dH, dM] = infos.depart.split(':').map(Number);
+          
+          let diffMinutes = (dH * 60 + dM) - (aH * 60 + aM);
+          if (diffMinutes < 0) {
+            diffMinutes += 24 * 60;
+          }
+          
+          const heures = Math.floor(diffMinutes / 60);
+          const minutes = diffMinutes % 60;
+          spanDuree.textContent = `${heures}h ${minutes.toString().padStart(2, '0')}min`;
+        } else {
+          spanDuree.textContent = '-';
+        }
+      });
+    }
+
+    // Mettre à jour la table au démarrage
+    mettreAJourTableHistorique();
+    
+    // Écouter les changements dans localStorage pour mettre à jour la table dynamiquement
+    window.addEventListener('storage', () => {
+      mettreAJourTableHistorique();
+    });
      
 
   if ('serviceWorker' in navigator) {
