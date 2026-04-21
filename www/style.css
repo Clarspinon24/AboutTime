@@ -151,3 +151,47 @@
       max-width: 500px;
       margin: 10px;
     }
+
+    /*//////////////////////////*/
+/* Pour aligner à gauche */
+
+
+#fd {
+  position: absolute;
+  bottom: 0;
+  left: 0; /* ou right, selon le positionnement souhaité */
+  z-index: -10;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+#fg {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: -10;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+#frog {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: -12;
+}
+
+#montre_devant{
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -10;
+}
+#montre_derrière{
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: -10; 
+}
+    

@@ -5,7 +5,11 @@
 //   './index.html',
 //   './girlmath.png',
 //   './icons/logo.png',
-//   './icons/logo2.png'
+//   './icons/logo2.png',
+     './images/flecheg.jpg',
+     './images/grenouille.jpg',
+     './images/montre1.jpg',
+     './images/montre2.jpg'
 // ];
 
 // // Installation : Mise en cache des ressources

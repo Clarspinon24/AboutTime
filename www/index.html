@@ -114,6 +114,13 @@
                   </div>
                   <button onclick="doDateDiff()">Calculer</button>
             </section>
+ 
+           <a><img  id="fd" src="images/fleched.jpg" alt="flèche droite"></a> 
+           <a><img  id="fg" src="images/flecheg.jpg" alt="flèche gauche"></a> 
+            <img  id="frog" src="images/grenouille.jpg" alt="grenouille">
+            <img  id="montre_devant" src="images/montre1.jpg" alt="devant d'une montre">
+            <img  id="montre_derrière" src="images/montre2.jpg" alt="derrière d'une montre">
+        
  </section>
 <section class="section" id="section_travail">
      <div class="card">
@@ -161,41 +168,49 @@
         </table>
     </div>
 
-  <section class="block">
-      <div class="card">
-        <h3>-- Badge --</h3>
+        <section class="block">
+            <div class="card">
+              <h3>-- Badge --</h3>
+
+              
+              <div style="display:flex; gap:10px">
+                  <button id="btn-matin" onclick="doBadge('Matin')" style="flex:1">☀️</button>
+                  <button id="btn-soir" onclick="doBadge('Soir')" style="flex:1" class="danger">🌙</button>
+              </div>
+              
+              <div style="text-align: right; margin-top: 10px;">
+                  <button onclick="resetPointage()" style="background: none; border: none; color: gray; font-size: 0.7em; text-decoration: underline; cursor: pointer;">
+                      annuler le badgeage
+                  </button>
+              </div>
+                    <div id="status-badge" style=" margin-bottom: 10px;">Prêt pour le badgeage</div>
+          </div>
 
         
-        <div style="display:flex; gap:10px">
-            <button id="btn-matin" onclick="doBadge('Matin')" style="flex:1">☀️</button>
-            <button id="btn-soir" onclick="doBadge('Soir')" style="flex:1" class="danger">🌙</button>
-        </div>
+
+              <div class="card">
+              <h3>--- Argent ---</h3>
+              
+              <div style="text-align: center; margin: 20px 0;">
+                  <span id="affichage-solde" style="font-size: 2.5em; font-weight: bold; color: #2c3e50;">0.00</span>
+                  <span style="font-size: 1.5em;">€</span>
+              </div>
+
+              <div class="row">
+                  <input type="number" id="solde-input" step="0.01" inputmode="decimal" placeholder="Nouveau solde" style="display:none">
+                  <button id="submit" onclick="toggleSoldeInput()">Modifier</button>
+                  <button id="cancel-btn" onclick="cancelSolde()" style="display:none">Annuler</button>
+              </div>
+          </div>
+          
+      </section>
+      
+           <a><img  id="fd" src="images/fleched.jpg" alt="flèche droite"></a> 
+           <a><img  id="fg" src="images/flecheg.jpg" alt="flèche gauche"></a> 
+            <img  id="frog" src="images/grenouille.jpg" alt="grenouille">
+            <img  id="montre_devant" src="images/montre1.jpg" alt="devant d'une montre">
+            <img  id="montre_derrière" src="images/montre2.jpg" alt="derrière d'une montre">
         
-        <div style="text-align: right; margin-top: 10px;">
-            <button onclick="resetPointage()" style="background: none; border: none; color: gray; font-size: 0.7em; text-decoration: underline; cursor: pointer;">
-                annuler le badgeage
-            </button>
-        </div>
-              <div id="status-badge" style=" margin-bottom: 10px;">Prêt pour le badgeage</div>
-    </div>
-
-   
-
-        <div class="card">
-        <h3>--- Argent ---</h3>
-        
-        <div style="text-align: center; margin: 20px 0;">
-            <span id="affichage-solde" style="font-size: 2.5em; font-weight: bold; color: #2c3e50;">0.00</span>
-            <span style="font-size: 1.5em;">€</span>
-        </div>
-
-        <div class="row">
-            <input type="number" id="solde-input" step="0.01" inputmode="decimal" placeholder="Nouveau solde" style="display:none">
-            <button id="submit" onclick="toggleSoldeInput()">Modifier</button>
-            <button id="cancel-btn" onclick="cancelSolde()" style="display:none">Annuler</button>
-        </div>
-    </div>
-</section>
 </section>
 
   <script src="utilitaire.js"></script>
