@@ -159,7 +159,7 @@
 #fd {
   position: absolute;
   bottom: 0;
-  left: 0; /* ou right, selon le positionnement souhaité */
+  right: 0; /* ou right, selon le positionnement souhaité */
   z-index: -10;
   margin-left: 20px;
   cursor: pointer;
@@ -168,7 +168,7 @@
 #fg {
   position: absolute;
   bottom: 0;
-  right: 0;
+  left: 0;
   z-index: -10;
   margin-right: 20px;
   cursor: pointer;
