@@ -151,10 +151,12 @@
       max-width: 500px;
       margin: 10px;
     }
-
-    /*//////////////////////////*/
-/* Pour aligner à gauche */
-
+.footer {
+  position: relative;
+  width: 100%;
+  height: 150px; 
+ margin-bottom: 0;
+}
 
 :root {
     --main-color: #579f5d;
@@ -488,7 +490,7 @@ fieldset p, fieldset input, fieldset label {
 #fd {
   position: absolute;
   bottom: 0;
-  right: 0; /* ou right, selon le positionnement souhaité */
+  right: 0; 
   z-index: -10;
   margin-left: 20px;
   cursor: pointer;
