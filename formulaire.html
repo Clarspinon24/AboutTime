@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="form.css">
+    <title>Inscription</title>
+</head>
+<body>
+    <form>   
+        
+                        <fieldset class="score">
+                            <h1 id="resultat"></h1>
+                        </fieldset>
+            <fieldset>
+                <legend>Mensuration</legend>
+                <article>
+                    <label for="poitrine">Poitrine :</label>
+                    <input id="poitrine" name="poitrine" type="number">
+                </article>
+
+                <article>
+                    <label for="tour-taille">Tour de Taille :</label>
+                    <input id="tour-taille" name="tour-taille" type="number">
+                </article>
+
+                <article>
+                    <label for="hanche">Hanche :</label>
+                    <input id="hanche" name="hanche" type="number">
+                </article>
+
+            </fieldset>
+
+            <fieldset>
+                <legend>Santé & Identité</legend>  
+                    <article>
+                        <label for="pseudo">Pseudo :</label>
+                        <input id="pseudo" name="pseudo" type="text">
+                    </article>
+                    
+                    <article>
+                        <label for="age">Age :</label>
+                        <input id="age" name="age" type="number">
+                    </article>
+                    
+                    <article>
+                        <label for="poids">Poids :</label>
+                        <input id="poids" name="poids" type="number">
+                    </article>
+
+                    <article>
+                        <label for="taille">Taille :</label>
+                        <input id="taille" name="taille" type="number">
+                        <label for="taille">cm</label>
+                    </article>
+
+                        <button class="button" id="calculer" type="button">Calculer</button>
+
+            </fieldset> 
+
+
+            <fieldset>
+                <legend>Repas du Jour</legend>
+                    <article>
+                        <label for="aliment">Aliment :</label>
+                        <input id="aliment" name="aliment" type="text">
+                    </article>
+
+                    <article>
+                        <label for="calorie">Nombre de Calories :</label>
+                        <input id="calorie" name="calorie" type="number">
+                    </article>
+
+                    <button  class="button" id="ajouter_aliment" type="button">Ajouter l'aliment</button>
+
+                    <ul id="liste-repas"></ul>
+            </fieldset>
+    </form>
+
+    <a id="ticket">Télécharger Ticket</a>
+
+    <script>
+        let caloriesRestante = 0;
+        let ajouter= document.getElementById("ajouter_aliment")
+        let aliment= document.getElementById("aliment")
+        let calorie = document.getElementById("calorie")
+        let liste = document.getElementById("liste-repas")
+        let poids = document.getElementById("poids");
+        let taille = document.getElementById("taille");
+        let age = document.getElementById("age");
+        const ticket = document.getElementById("ticket")
+        const calculer = document.getElementById("calculer");
+        const result = document.getElementById("resultat");
+        const pseudo = document.getElementById("pseudo")
+
+        function Afficher(){
+            result.textContent = caloriesRestante + " kcal"
+            
+        }
+
+        calculer.addEventListener('click', (e) => {
+            const MB = (10 * poids.value ) + (6.25 * taille.value) - (5*age.value) - 161
+            result.textContent = MB + " kcal"
+            caloriesRestante = MB
+            localStorage.setItem("monBudgetCalories", MB);
+        }); 
+
+        ajouter.addEventListener("click", (e) => {
+            caloriesRestante -= calorie.value
+            Afficher()
+            liste.innerHTML += '<li>'+ aliment.value +' : '+ calorie.value +'</li>'
+            calorie.value = ""
+            aliment.value = ""
+        })
+
+        if (localStorage.getItem("monBudgetCalories")) {
+            caloriesRestante = localStorage.getItem("monBudgetCalories")
+            Afficher()
+        }
+
+        ticket.addEventListener('click', (e) => {
+            const text = "=== TICKET CALORIES DU "+ new Date().toLocaleDateString("fr-FR")+"===\nPseudo :"+ pseudo.value+"\nBudget Initial :"+ localStorage.getItem("monBudgetCalories")+"kcal\nCalories Restantes :"+ caloriesRestante +"kcal\n\n--- HISTORIQUE DES REPAS ---\n"+ liste.innerText+"\n====================================="
+            const ticket_quotidien = new Blob([text], { type: "text/plain" });
+            ticket.href = URL.createObjectURL(ticket_quotidien);
+            ticket.download = "ticket_"+new Date().toLocaleDateString("fr-FR")+".txt";
+        }); 
+    </script>
+
+</body>
+</html>
