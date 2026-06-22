@@ -13,21 +13,32 @@
                         </fieldset>
             <fieldset>
                 <legend>Mensuration</legend>
-                <article>
-                    <label for="poitrine">Poitrine :</label>
-                    <input id="poitrine" name="poitrine" type="number">
-                </article>
+                
+                <div id="zone-affichage-mensurations">
+                    <p>Poitrine : <strong id="valeur-poitrine">--</strong> cm</p>
+                    <p>Tour de Taille : <strong id="valeur-taille">--</strong> cm</p>
+                    <p>Hanche : <strong id="valeur-hanche">--</strong> cm</p>
+                    <button class="button" id="btn-modifier" type="button">Modifier mes mensurations</button>
+                </div>
 
-                <article>
-                    <label for="tour-taille">Tour de Taille :</label>
-                    <input id="tour-taille" name="tour-taille" type="number">
-                </article>
+                <div id="zone-saisie-mensurations" style="display: none;">
+                    <article>
+                        <label for="poitrine">Poitrine :</label>
+                        <input id="poitrine" name="poitrine" type="number">
+                    </article>
 
-                <article>
-                    <label for="hanche">Hanche :</label>
-                    <input id="hanche" name="hanche" type="number">
-                </article>
+                    <article>
+                        <label for="tour-taille">Tour de Taille :</label>
+                        <input id="tour-taille" name="tour-taille" type="number">
+                    </article>
 
+                    <article>
+                        <label for="hanche">Hanche :</label>
+                        <input id="hanche" name="hanche" type="number">
+                    </article>
+                    
+                    <button  class="button" id="btn-enregistrer" type="button">Enregistrer</button>
+                </div>
             </fieldset>
 
             <fieldset>
@@ -87,8 +98,18 @@
         let poids = document.getElementById("poids");
         let taille = document.getElementById("taille");
         let age = document.getElementById("age");
+        let poitrine = document.getElementById("valeur-poitrine")
+        let tour_de_taille = document.getElementById("valeur-taille")
+        let hanche = document.getElementById("valeur-hanche")
+        let input_poitrine = document.getElementById("poitrine")
+        let input_tour_de_taille = document.getElementById("tour-taille")
+        let input_hanche = document.getElementById("hanche")
+        let mensurations = document.getElementById("zone-affichage-mensurations")
+        let input_mensurations = document.getElementById("zone-saisie-mensurations")
+        const enregistrer =  document.getElementById("btn-enregistrer")
         const ticket = document.getElementById("ticket")
         const calculer = document.getElementById("calculer");
+        const modifier = document.getElementById("btn-modifier");
         const result = document.getElementById("resultat");
         const pseudo = document.getElementById("pseudo")
 
@@ -103,6 +124,31 @@
             caloriesRestante = MB
             localStorage.setItem("monBudgetCalories", MB);
         }); 
+
+        modifier.addEventListener('click', (e) => {
+            mensurations.style.display="none";
+            input_mensurations.style.display="block";
+        }); 
+
+        enregistrer.addEventListener('click', (e) => {
+            poitrine.textContent= input_poitrine.value + "cm"
+            tour_de_taille.textContent= input_tour_de_taille.value + "cm"
+            hanche.textContent= input_hanche.value + "cm" 
+            localStorage.setItem("poitrine", input_poitrine.value);
+            localStorage.setItem("tour_de_taille",input_tour_de_taille.value );
+            localStorage.setItem("hanche",input_hanche.value);
+            mensurations.style.display="block";
+            input_mensurations.style.display="none";
+        }); 
+
+        if (localStorage.getItem("poitrine")) {
+            poitrine.textContent = localStorage.getItem("poitrine")
+            tour_de_taille.textContent= localStorage.getItem("tour_de_taille");
+            hanche.textContent= localStorage.getItem("hanche");
+            mensurations.style.display="block";
+            input_mensurations.style.display="none";
+        }
+
 
         ajouter.addEventListener("click", (e) => {
             caloriesRestante -= calorie.value
